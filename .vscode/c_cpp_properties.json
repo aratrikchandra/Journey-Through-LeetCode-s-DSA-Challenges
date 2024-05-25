@@ -2,7 +2,8 @@
     "configurations": [
         {
             "name": "Win32",
-            "C:\\MinGW\\bin"
+            "includePath": [
+                "C:\\MinGW\\bin"
             ],
             "defines": [
                 "_DEBUG",
