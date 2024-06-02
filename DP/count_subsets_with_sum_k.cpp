@@ -22,9 +22,9 @@ int solve_1(int ind, int target, int arr[], int n)
         return arr[0] == target;
 
     // try out all possibility
-    bool notTake = solve_1(ind - 1, target, arr, n);
+    int notTake = solve_1(ind - 1, target, arr, n);
 
-    bool take = 0;
+    int take = 0;
     // edge case
     if (arr[ind] <= target)
         take = solve_1(ind - 1, target - arr[ind], arr, n);
@@ -32,7 +32,7 @@ int solve_1(int ind, int target, int arr[], int n)
     return take + notTake;
 }
 // memoization
-bool solve_2(int ind, int target, vector<int> &arr, int n, vector<vector<int>> &dp)
+int solve_2(int ind, int target, vector<int> &arr, int n, vector<vector<int>> &dp)
 {
     // base case
     if (target == 0)
@@ -43,9 +43,9 @@ bool solve_2(int ind, int target, vector<int> &arr, int n, vector<vector<int>> &
     if (dp[ind][target] != -1)
         return dp[ind][target];
     // try out all possibility
-    bool notTake = solve_2(ind - 1, target, arr, n, dp);
+    int notTake = solve_2(ind - 1, target, arr, n, dp);
 
-    bool take = false;
+    int take = false;
     // edge case
     if (arr[ind] <= target)
         take = solve_2(ind - 1, target - arr[ind], arr, n, dp);
@@ -53,9 +53,9 @@ bool solve_2(int ind, int target, vector<int> &arr, int n, vector<vector<int>> &
     return dp[ind][target] = take | notTake;
 }
 // tabulation
-bool solve_3(vector<int> &arr, int k, int n)
+int solve_3(vector<int> &arr, int k, int n)
 {
-    vector<vector<bool>> dp(n, vector<bool>(k + 1, false));
+    vector<vector<int>> dp(n, vector<int>(k + 1, false));
     // base case
     for (int ind = 0; ind < n; ind++)
         dp[ind][0] = true;
@@ -67,9 +67,9 @@ bool solve_3(vector<int> &arr, int k, int n)
         for (int target = 1; target <= k; target++)
         {
             // try out all possibility
-            bool notTake = dp[ind - 1][target];
+            int notTake = dp[ind - 1][target];
 
-            bool take = false;
+            int take = false;
             // edge case
             if (arr[ind] <= target)
                 take = dp[ind - 1][target - arr[ind]];
@@ -80,9 +80,9 @@ bool solve_3(vector<int> &arr, int k, int n)
     return dp[n - 1][k];
 }
 // space optimization
-bool solve_4(vector<int> &arr, int k, int n)
+int solve_4(vector<int> &arr, int k, int n)
 {
-    vector<bool> prev(k + 1, false);
+    vector<int> prev(k + 1, false);
     // base case
     for (int ind = 0; ind < n; ind++)
         prev[0] = true;
@@ -91,14 +91,14 @@ bool solve_4(vector<int> &arr, int k, int n)
 
     for (int ind = 1; ind < n; ind++)
     {
-        vector<bool> curr(k + 1, false);
+        vector<int> curr(k + 1, false);
         curr[0]=true;
         for (int target = 1; target <= k; target++)
         {
             // try out all possibility
-            bool notTake = prev[target];
+            int notTake = prev[target];
 
-            bool take = false;
+            int take = false;
             // edge case
             if (arr[ind] <= target)
                 take = prev[target - arr[ind]];
@@ -109,7 +109,7 @@ bool solve_4(vector<int> &arr, int k, int n)
     }
     return prev[k];
 }
-bool isSubsetSum(vector<int> arr, int target)
+int isSubsetSum(vector<int> arr, int target)
 {
     int n = arr.size();
     // return solve_1(n-1,target,arr,n);
