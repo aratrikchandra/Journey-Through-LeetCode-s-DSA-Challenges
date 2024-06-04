@@ -111,6 +111,7 @@ int solve_4(string &s1, string &s2)
                 curr[j] = notMatch % mod;
             }
         }
+        prev=curr;
     }
     return prev[m] %mod;
 }
@@ -122,7 +123,7 @@ int numDistinct(string s1, string s2)
     vector<vector<int>> dp(n + 1, vector<int>(m + 1, -1));
     return solve_2(n, m, s1, s2, dp);
 }
-// https://leetcode.com/problems/distinct-subsequences/submissions/1275595099/
+// https://leetcode.com/problems/distinct-subsequences/submissions/1276067026/
 int main()
 {
 
