@@ -47,6 +47,7 @@ public:
     return 0;
   }
 };
+// https://www.geeksforgeeks.org/problems/children-sum-parent/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=hildren-sum-parent
 int main()
 {
 
