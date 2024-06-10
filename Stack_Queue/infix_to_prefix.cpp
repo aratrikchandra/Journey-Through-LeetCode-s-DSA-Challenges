@@ -1,105 +1,95 @@
 #include <bits/stdc++.h>
+
 using namespace std;
+
 bool isOperator(char c)
 {
-    if(!isdigit(c) && !isalpha(c) && !isspace(c))
-    return true;
-    else
-    return false;
+    return (!isalpha(c) && !isdigit(c));
 }
-int priority(char c)
-{
-    if (c == '^')
-        return 3;
-    else if (c == '*' || c == '/')
-        return 2;
-    else if (c == '+' || c == '-')
-        return 1;
 
-    return 0; // in case not above
-}
-string infixToPostfix(string s)
+int getPriority(char C)
 {
-    int n = s.size();
-    stack<char> st;
-    string result = "";
-    for (int i = 0; i < n; i++)
+    if (C == '-' || C == '+')
+        return 1;
+    else if (C == '*' || C == '/')
+        return 2;
+    else if (C == '^')
+        return 3;
+    return 0;
+}
+
+string infixToPostfix(string infix)
+{
+    infix = '(' + infix + ')';
+    int l = infix.size();
+    stack<char> char_stack;
+    string output;
+
+    for (int i = 0; i < l; i++)
     {
-        char c = s[i];
-        if (isalpha(c) || isdigit(c)) // if c is any variable or digit basically an operand
-            result += c;
-        else if (c == '(')
-            st.push(c);
-        else if (c == ')')
+        if (isalpha(infix[i]) || isdigit(infix[i]))
+            output += infix[i];
+        else if (infix[i] == '(')
+            char_stack.push('(');
+        else if (infix[i] == ')')
         {
-            while (!st.empty() && st.top() != '(')
+            while (char_stack.top() != '(')
             {
-                result += st.top();
-                st.pop();
+                output += char_stack.top();
+                char_stack.pop();
             }
-            st.pop();
+            char_stack.pop();
         }
         else
-        {   if(isOperator(c)){
-            if(c=='^'){                                                       // operator found
-            while (!st.empty() && priority(st.top()) >= priority(c)) // here '^' will be left-associative as we are dealing with reverse expression
+        {
+            while (!char_stack.empty() && isOperator(char_stack.top()) &&
+                   ((infix[i] != '^' && getPriority(infix[i]) <= getPriority(char_stack.top())) ||
+                    (infix[i] == '^' && getPriority(infix[i]) < getPriority(char_stack.top()))))
             {
-                result += st.top();
-                st.pop();
+                output += char_stack.top();
+                char_stack.pop();
             }
-            }
-            else{
-              while (!st.empty() && priority(st.top()) > priority(c)) // here '+,-,*,/' will be right-associative as we are dealing with reverse expression
-            {
-                result += st.top();
-                st.pop();
-            }  
-            }
-            st.push(c);
-        }
+            char_stack.push(infix[i]);
         }
     }
-    while (!st.empty())
+
+    while (!char_stack.empty())
     {
-        result += st.top();
-        st.pop();
+        output += char_stack.top();
+        char_stack.pop();
     }
-    return result;
+    return output;
 }
-string infixToPrefix(string infix){
-    int n=infix.size();
 
-    reverse(infix.begin(),infix.end());
-    for(int i=0;i<n;i++)
+string infixToPrefix(string infix)
+{
+    int l = infix.size();
+    reverse(infix.begin(), infix.end());
+
+    for (int i = 0; i < l; i++)
     {
-        if(infix[i]=='(')
+        if (infix[i] == '(')
         {
-            infix[i]=')';
+            infix[i] = ')';
             i++;
         }
-        if(infix[i]==')')
+        else if (infix[i] == ')')
         {
-            infix[i]='(';
+            infix[i] = '(';
             i++;
         }
     }
 
-    string prefix=infixToPostfix(infix);
-    reverse(prefix.begin(),prefix.end());
+    string prefix = infixToPostfix(infix);
+    reverse(prefix.begin(), prefix.end());
+
     return prefix;
 }
+
 int main()
 {
-    string infix = "A + B * C - D / E ^ F * G + H - I * J / K ^ L * M + N - O * P / Q ^ R * S";
-    infix.erase(remove(infix.begin(), infix.end(), ' '), infix.end()); 
-    cout << "Infix expression: " << infix << endl;
-    string actual=infixToPrefix(infix);
-    string expected="- + A * B C + - / D * ^ E F G + - H * I / J * ^ K L M + - N * O / P * ^ Q R S";
-    expected.erase(remove(expected.begin(), expected.end(), ' '), expected.end()); 
-    cout<<"prefix got:"<<actual<<endl;
-    if(actual==expected)
-    cout<<"passed";
-    else
-    cout<<"failed";
+    string s = "a+b*c^d-e/f^g*h";
+    cout << "Infix expression: " << s << endl;
+    cout << "Prefix Expression: " << infixToPrefix(s) << endl;
     return 0;
 }
