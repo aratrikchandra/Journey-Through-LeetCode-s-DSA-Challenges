@@ -8,39 +8,40 @@ public:
     vector<int> arr;
     Stack(int capacity) {
         arr.resize(capacity);
-        topIndex=-1;
+        topIndex = -1;
     }
 
     void push(int num) {
-        if(isFull())
+        // check overflow
+        if (isFull())
             return;
-       topIndex++;
-       arr[topIndex]=num;
+        topIndex++;
+        arr[topIndex] = num;
     }
 
     int pop() {
-        if(isEmpty())
+        if (isEmpty())
             return -1;
-        int val=arr[topIndex];
+        int val = arr[topIndex];
         topIndex--;
         return val;
     }
     
     int top() {
-        if(isEmpty())
+        if (isEmpty())
             return -1;
         return arr[topIndex];
     }
     
-    int isEmpty() {
-        return topIndex==-1;
+    bool isEmpty() {
+        return topIndex == -1;
     }
     
-    int isFull() {
-        return topIndex==arr.size();
+    bool isFull() {
+        return topIndex == arr.size() - 1;
     }
-    
 };
+// https://www.naukri.com/code360/problems/stack-implementation-using-array_3210209?leftPanelTabValue=SUBMISSION
 
 int main(){
   
