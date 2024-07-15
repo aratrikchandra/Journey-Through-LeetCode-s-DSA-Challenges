@@ -1,27 +1,25 @@
 #include <bits/stdc++.h>
 using namespace std;
-int jump(vector<int>& arr) {
-        int n = arr.size();
-    if(n==1)
-    return 0;
-    int coverage = 0;
-    int lastIndexOfCurrentWindow=0;
-    int jumps=0;
-    for(int i=0;i<n;i++)
-    {
-        coverage=max(coverage,i+arr[i]);
-         if(coverage>=n-1)
-        {
+int jump(vector<int>& nums) {
+        int n=nums.size();
+        //edge case
+        if(n==1)
+        return 0;
+        int maxIndex=0;
+        int l=0;
+        int r=0;
+        int jumps=0;
+        while(r<n){
+            for(int i=l;i<=r;i++){
+                maxIndex=max(maxIndex,i+nums[i]);
+            }
+            l=r+1;
+            r=maxIndex;
             jumps++;
+            if(maxIndex>=n-1)
             return jumps;
-        } 
-        if(i==lastIndexOfCurrentWindow)
-        {
-            lastIndexOfCurrentWindow=coverage;
-            jumps++; // increment jump count when we completed a window and jumping to new one
-        }  
-    }
-    return jumps;
+        }
+        return jumps;
     }
 int main()
 {

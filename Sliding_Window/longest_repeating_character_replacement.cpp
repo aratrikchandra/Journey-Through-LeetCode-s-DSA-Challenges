@@ -48,6 +48,32 @@ int characterReplacement(string s, int k) {
         }
         return maxLen;
     }
+// optimal 3:
+int characterReplacement(string s, int k) {
+        int n=s.size();
+        int l=0;
+        int r=0;
+        int maxf=0;
+        vector<int> hash(26,0);
+        int maxLen=0;
+
+        while(r<n){
+            hash[s[r]-'A']++;
+            maxf=max(maxf,hash[s[r]-'A']);
+            if(l<=r && ((r-l+1)-maxf)>k){
+                hash[s[l]-'A']--;
+                l++;
+                // maxf=0;
+                // for(int i=0;i<26;i++)
+                // maxf=max(maxf,hash[i]);
+            }
+            if( ( (r-l+1)-maxf)<=k){
+                maxLen=max(maxLen,r-l+1);
+            }
+            r++;
+        }
+        return maxLen;
+    }
 int main(){
   string s="AABABBA";
   int k=1;

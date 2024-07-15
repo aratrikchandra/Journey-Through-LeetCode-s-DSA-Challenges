@@ -2,63 +2,55 @@
 
 using namespace std;
 
-class Solution
-{
+class Solution {
 public:
-    // Function to find minimum time required to rot all oranges.
-    int orangesRotting(vector<vector<int>> &grid)
-    {
+    int orangesRotting(vector<vector<int>>& grid) {
         int n = grid.size();
         int m = grid[0].size();
-
-        int delRow[] = {-1, 0, +1, 0};
-        int delCol[] = {0, 1, 0, -1};
-        vector<vector<int>> visited(n, vector<int>(m, 0));
-        queue<pair<pair<int, int>, int>> q; // <<row,col>,time>
+        queue<pair<int, int>> q;
         int fresh = 0;
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = 0; j < m; j++)
-            {
-                if (grid[i][j] == 2) // starting points of bfs
-                {
-                    q.push({{i, j}, 0});
-                }
-                else if (grid[i][j] == 1) // starting points of bfs
-                {
+        // finding sources
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 2) {
+                    q.push({i, j});
+                } else if (grid[i][j] == 1)
                     fresh++;
-                }
             }
         }
-        int maxTime = 0;
-        int count=0;
-        while (!q.empty())
-        {
-            int row = q.front().first.first;
-            int col = q.front().first.second;
-            int time = q.front().second;
+        int dr[] = {0, 0, -1, 1};
+        int dc[] = {1, -1, 0, 0};
+        int timer = 0;
+        int newlyRotten=0;
+        while (!q.empty()) {
+            int size = q.size();
+            bool flag = false; // for each level we have flag
+            for (int count = 0; count < size; count++) {
+                auto it = q.front();
+                q.pop();
+                int row = it.first;
+                int col = it.second;
 
-            q.pop();
-            maxTime = max(maxTime, time);
-            for (int i = 0; i < 4; i++)
-            {
-                int nRow = row + delRow[i];
-                int nCol = col + delCol[i];
-
-                // checking for validity
-                if (nRow >= 0 && nRow < n && nCol >= 0 && nCol < m)
-                {
-                    if (grid[nRow][nCol] == 1 && visited[nRow][nCol] != 2) // important
-                    {
-                        visited[nRow][nCol] = 2;
-                        q.push({{nRow, nCol}, time + 1});
-                        count++;
+                for (int i = 0; i < 4; i++) {
+                    int newRow = row + dr[i];
+                    int newCol = col + dc[i];
+                    // check array out of bound
+                    if (newRow >= 0 && newRow < n && newCol >= 0 &&
+                        newCol < m) {
+                        if (grid[newRow][newCol] == 1) {
+                            q.push({newRow, newCol});
+                            grid[newRow][newCol] = 2;
+                            flag = true;
+                            newlyRotten++;
+                        }
                     }
                 }
             }
+            if(flag)
+            timer++;
         }
-        if(fresh==count)
-        return maxTime;
+        if(fresh==newlyRotten)
+        return timer;
         else
         return -1;
     }
@@ -75,4 +67,4 @@ int main()
     return 0;
 }
 
-// https://leetcode.com/problems/rotting-oranges/submissions/1141419581/
+// https://leetcode.com/problems/rotting-oranges/submissions/1290800145/

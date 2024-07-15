@@ -1,3 +1,6 @@
+#include <bits/stdc++.h>
+using namespace std;
+
 int secondLargest(vector<int> &arr,int n)
 {
         int largest=arr[0];

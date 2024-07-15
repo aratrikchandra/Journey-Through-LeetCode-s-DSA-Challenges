@@ -1,43 +1,39 @@
 #include <bits/stdc++.h>
 using namespace std;
 bool checkValidString(string s) {
-        stack<int> open,star;
         int n=s.size();
-        for(int i=0;i<n;i++)
-        {
+        stack<int> open, star;
+        for(int i=0;i<n;i++){
             if(s[i]=='(')
             open.push(i);
             else if(s[i]=='*')
             star.push(i);
             else{
-                // we encounter ')'
                 if(!open.empty())
                 open.pop();
-                else{
-                    if(!star.empty())
-                    star.pop();
-                    else
+                else if(!star.empty())
+                star.pop();
+                else
                     return false;
-                }
             }
         }
 
-        while(!open.empty())
-        {
-            int i=open.top();
-            open.pop();
-            if(!star.empty())
+        while(!open.empty() && !star.empty()){
+            int ind1=open.top();
+            int ind2=star.top();
+            if(ind1<ind2)
             {
-            int j=star.top();
-            star.pop();
-            if(i>j)
-            return false;
+                open.pop();
+                star.pop();
             }
             else{
                 return false;
             }
         }
+        if(open.empty())
         return true;
+
+        return false;
     }
 int main(){
   

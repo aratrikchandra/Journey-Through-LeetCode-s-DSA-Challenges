@@ -63,3 +63,41 @@ int main() {
 }
 
 // https://www.geeksforgeeks.org/problems/minimum-spanning-tree/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=minimum-spanning-tree
+
+// using Dijkstra's Algorithm
+int spanningTree(int n, vector<vector<int>> adj[])
+    {
+        vector<int> dist(n,1e9);
+        vector<int> prev(n,-1);
+        vector<int> visited(n,0);
+        dist[0]=0;
+        
+        priority_queue< pair<int,int> , vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0,0});
+        int sum=0;
+        while(!pq.empty()){
+            auto it=pq.top();
+            pq.pop();
+            int node=it.second;
+            if(visited[node]==1)
+            continue;
+            // int dis=it.first;
+             visited[node]=1;
+            
+            for(auto it: adj[node]){
+                int v=it[0];
+                int wt=it[1];
+                
+                if(visited[v]==0 && wt<dist[v])
+                {
+                    dist[v]=wt;
+                    prev[v]=node;
+                    pq.push({wt,v});
+                }
+            }
+        }
+        for (int i = 1; i < n; i++) {
+        sum += dist[i]; // Sum of MST edge weights
+        }
+        return sum;
+    }

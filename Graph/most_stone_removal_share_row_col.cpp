@@ -129,3 +129,5 @@ int main()
 }
 
 // https://www.geeksforgeeks.org/problems/maximum-stone-removal-1662179442/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=maximum-stone-removal
+
+// https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/submissions/

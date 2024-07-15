@@ -1,84 +1,62 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class Solution
-{
-
-    private:
-    void dfs(int node,vector<int> adj[],vector<int> &visited,stack<int> &st)
+	#include<bits/stdc++.h>
+	void dfsRev(int node, vector<int> &visited,vector<int> adj[]){
+	    visited[node]=1;
+	    
+	    for(auto it: adj[node]){
+	        if(visited[it]==0)
+	        dfsRev(it,visited,adj);
+	    }
+	}
+	void dfs(int node, vector<int> &visited,stack<int> &st,vector<int> adj[]){
+	    visited[node]=1;
+	    
+	    for(auto it: adj[node]){
+	        if(visited[it]==0)
+	        dfs(it,visited,st,adj);
+	    }
+	    st.push(node);
+	}
+	//Function to find number of strongly connected components in the graph.
+    int kosaraju(int n, vector<vector<int>>& graph)
     {
-        visited[node]=1;
-
-        for(auto it:adj[node])
-        {
-            if(!visited[it])
-            {
-                dfs(it,adj,visited,st);
-            }
+        vector<int> adj[n];
+        for(auto it: graph){
+            adj[it[0]].push_back(it[1]);
         }
-        st.push(node);
-    }
-
-public:
-    //Function to find number of strongly connected components in the graph.
-    int kosaraju(int V, vector<int> adj[])
-    {
-        vector<int> visited(V,0);
+        vector<int> visited(n,0);
         stack<int> st;
-
-        for(int i=0;i<V;i++)
-        {
-            if(!visited[i])
-             dfs(i,adj,visited,st);
+        for(int i=0;i<n;i++){
+            if(visited[i]==0)
+            dfs(i,visited,st,adj);
         }
-        
-        // reverse the edges of the graph
-        vector<int> adjRev[V];
-        for(int i=0;i<V;i++)
-        {
-            visited[i]=0;
-            for(auto it: adj[i])
-            {
+        // constructing the reverse graph
+        vector<int> adjRev[n];
+        for(int i=0;i<n;i++){
+            for(auto it: adj[i]){
                 adjRev[it].push_back(i);
             }
         }
-
-        // for simplicity we can create two instances of
-        // vector<int> visited1(V,0);
-        // another dfs() call
-        // but we will try to work with only one
-
-        stack<int> dummy;
+        for(int i=0;i<n;i++){
+            visited[i]=0;
+        }
         int count=0;
-        while(!st.empty())
-        {
-            int node = st.top();
-            st.pop();
-            if(!visited[node]){
-                dfs(node,adjRev,visited,dummy);
+        while(!st.empty()){
+            int node=st.top();
+            if(visited[node]==0)
+            {
+                dfsRev(node,visited,adjRev);
                 count++;
             }
-
-
+            st.pop();
         }
-    return count;
+        return count;
     }
-};
-
-int main() {
-
-    int n = 5;
-    int edges[5][2] = {
-        {1, 0}, {0, 2},
-        {2, 1}, {0, 3},
-        {3, 4}
-    };
-    vector<int> adj[n];
-    for (int i = 0; i < n; i++) {
-        adj[edges[i][0]].push_back(edges[i][1]);
-    }
-    Solution obj;
-    int ans = obj.kosaraju(n, adj);
-    cout << "The number of strongly connected components is: " << ans << endl;
-    return 0;
+int stronglyConnectedComponents(int v, vector<vector<int>> &edges)
+{
+	return kosaraju(v,edges);
 }
+
+// https://www.naukri.com/code360/problems/count-strongly-connected-components-kosaraju-s-algorithm_1171151?leftPanelTabValue=SUBMISSION

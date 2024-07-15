@@ -1,63 +1,42 @@
 #include <bits/stdc++.h>
 using namespace std;
-
 class Solution {
-  private: 
-    // dfs traversal function 
-    void dfs(int node, vector<int> adjLs[], int vis[]) {
-        // mark the more as visited
-        vis[node] = 1; 
-        for(auto it: adjLs[node]) {
-            if(!vis[it]) {
-                dfs(it, adjLs, vis); 
-            }
+public:
+    void dfs(int node, vector<int>& visited,
+             vector<int> adj[]) {
+        visited[node] = 1;
+        // ans.push_back(node);
+
+        for (auto it : adj[node]) {
+            if (visited[it] == 0)
+                dfs(it, visited, adj);
         }
     }
-  public:
-    int numProvinces(vector<vector<int>> adj, int V) {
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        int n = isConnected.size();
 
-    vector<int> adjList[V];
-
-      for(int i=0;i<V;i++)
-      {
-        for(int j=0;j<V;j++)
-        {
-            if(adj[i][j]==1 && i!=j)
-            {
-                adjList[i].push_back(j);
-                adjList[j].push_back(i);
+        // converting adj matrix to adj list
+        vector<int> adj[n + 1];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (isConnected[i][j] == 1)
+                    adj[i + 1].push_back(j + 1);
             }
         }
-      }
 
-      int visited[V]={0};
-      int cmp=0;
-      for(int i=0;i<V;i++)
-      {
-        if(!visited[i])
-        {
-            cmp++;
-            dfs(i,adjList,visited);
+        vector<int> visited(n+1,0);
+        int count=0;
+        for(int i=1;i<=n;i++){
+            if(visited[i]==0)
+            {
+                dfs(i,visited,adj);
+                count++;
+            }
         }
-      } 
-      return cmp;  
+        return count;
     }
 };
+// https://leetcode.com/problems/number-of-provinces/submissions/1290133166/
 
-int main() {
-    
-    vector<vector<int>> adj
-    {
-        {1, 0, 1},
-        {0, 1, 0},
-        {1, 0, 1}
-    };
-
-        
-    Solution ob;
-    cout << ob.numProvinces(adj,3) << endl;
-        
-    return 0;
-}
 
 // https://www.geeksforgeeks.org/problems/number-of-provinces/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=number_of_provinces

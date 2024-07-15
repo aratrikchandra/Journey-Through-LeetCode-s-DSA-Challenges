@@ -4,51 +4,40 @@ using namespace std;
 class Solution {
   private: 
 
-    bool bfs(int node,int visited[],vector<int> adj[])
-    {
-        visited[node]=1;
-        queue<pair<int,int>> q;  // <node,parent>
+   // using bfs
+    bool bfs(int v, vector<int> adj[],vector<int> &visited, queue<pair<int,int>> &q){
 
-        q.push({node,-1}); // pushing the starting node
-
-        while(!q.empty())
-        {
-            int node = q.front().first;
-            int parent = q.front().second;
-
-            q.pop();
-
-            for(auto it: adj[node])
-            {
-                if(!visited[it])  // if adjacent node is unvisited
-                {
-                    q.push({it,node});
-                    visited[it]=1;
-                }
-                else if(it != parent) // if adjacent node is visited and also not parent
-                {
-                    return true;
-                }
-            }
-        }
-
-    return false;
+       q.push({v,-1});
+       visited[v]=1;
+       while(!q.empty()){
+           auto it=q.front();
+           q.pop();
+           int node=it.first;
+           int parent=it.second;
+           
+           for(auto it: adj[node]){
+               if(visited[it]==0){
+                   q.push({it,node});
+                   visited[it]=1;
+               }
+               else if(it!=parent){
+                   return true;
+               }
+           }
+       }
+       return false;
     }
-  public:
-    // Function to detect cycle in an undirected graph.
-    bool isCycle(int V, vector<int> adj[]) {
-        int visited[V]={0};
-
-        for(int i=0;i<V;i++)
-        {
-            if(!visited[i])
-            {
-                if(bfs(i,visited,adj)==true)  // call for different connnected component
-                return true;  
-            }
-        }
-
-        return false;
+    public:
+    bool isCycle(int n, vector<int> adj[]) {
+        vector<int> visited(n,0);
+       queue<pair<int,int>> q;
+       for(int i=0;i<n;i++){
+           if(visited[i]==0){
+               if(bfs(i,adj,visited,q)==true)
+               return true;
+           }
+       }
+       return false;
     }
 };
 

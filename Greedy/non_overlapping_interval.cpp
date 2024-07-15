@@ -1,32 +1,55 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-bool static comp(vector<int> &arr1, vector<int> &arr2)
+class Meeting{
+    public:
+  int start;
+  int end;
+  int id;
+  
+  Meeting(){
+      start=0;
+      end=0;
+      id=0;
+  }
+  Meeting(int start, int end, int id){
+      this->start=start;
+      this->end=end;
+      this->id=id;
+  }
+  
+};
+class Solution
 {
-    return arr1[1] < arr2[1];
-}
-int eraseOverlapIntervals(vector<vector<int>> &intervals)
-{
-    int n = intervals.size();
-    sort(intervals.begin(), intervals.end(), comp);
-    int count = 0;
-    int end=intervals[0][1];
-    for(int i=1;i<n;i++)
-    {
-        if(end>intervals[i][0])
-        {
-            count++;
-        }
-        else{
-            end=intervals[i][1];
-        }
+    public:
+    static bool comp(Meeting m1, Meeting m2){
+        return m1.end<m2.end;
     }
-    return count;
-}
-int main()
-{
+    //Function to find the maximum number of meetings that can
+    //be performed in a meeting room.
+    int maxMeetings(vector<vector<int>>& intervals, int n)
+    {
+        Meeting arr[n];
+        for(int i=0;i<n;i++){
+            Meeting m=Meeting(intervals[i][0],intervals[i][1],i+1);
+            arr[i]=m;
+        }
+        sort(arr,arr+n,comp);
+        int count=1;
+        int finishTime=arr[0].end;
+        for(int i=1;i<n;i++){
+            if(arr[i].start>=finishTime){
+                count++;
+                finishTime=arr[i].end;
+            }
+        }
+        return count;
+    }
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+        int n=intervals.size();
+        return n-maxMeetings(intervals,n);
+    }
+};
 
-    return 0;
-}
 
-// https://leetcode.com/problems/non-overlapping-intervals/submissions/1200601059/
+// https://leetcode.com/problems/non-overlapping-intervals/submissions/1319961497/

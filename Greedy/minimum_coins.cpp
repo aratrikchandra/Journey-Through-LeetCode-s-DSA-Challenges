@@ -1,17 +1,13 @@
 #include<bits/stdc++.h>
 using namespace std;
-vector<int> MinimumCoins(int v)
+vector<int> MinimumCoins(int amount)
 {
-    vector<int> coins= {1, 2, 5, 10, 20, 50, 100, 500, 1000};
+    int coins[]={1, 2, 5, 10, 20, 50, 100, 500, 1000};
     vector<int> ans;
-    for(int i=coins.size()-1;i>=0;i--)
-    {
-        if(coins[i]<=v)
-        {
-            int count=v/coins[i];
-            for(int j=0;j<count;j++)
+    for(int i=8;i>=0;i--){
+        while(coins[i]<=amount){
             ans.push_back(coins[i]);
-            v=v%coins[i];
+            amount=amount-coins[i];
         }
     }
     return ans;
