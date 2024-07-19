@@ -77,23 +77,21 @@ ListNode *getIntersectionNode(ListNode *head1, ListNode *head2) {
 */
 
 // Optimal Approach
- ListNode *getIntersectionNode(ListNode *head1, ListNode *head2) {
-        if(head1==NULL || head2==NULL)
-         return NULL;
-         ListNode *ptr1=head1,*ptr2=head2;
-        while(ptr1!=NULL && ptr2!=NULL)
-        {
-            if(ptr1==ptr2)
-                return ptr1;
-            ptr1=ptr1->next;
-            if(ptr1==NULL)
-                ptr1=head2;
-            ptr2=ptr2->next;
-            if(ptr2==NULL)
-                ptr2=head1;
+ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        ListNode *p=headA;
+        ListNode *q=headB;
+
+        while(true){
+            if(p==q)
+            return p;
+            if(p->next==NULL && q->next==NULL)
+            break;
+            
+            p=(p->next!=NULL)?p->next:headB;
+            q=(q->next!=NULL)?q->next:headA;
         }
-         return NULL;
-}
+        return NULL;
+    }
 
 
 //utility function to print linked list created

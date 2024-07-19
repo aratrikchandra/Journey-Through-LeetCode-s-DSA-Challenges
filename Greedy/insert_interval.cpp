@@ -1,38 +1,33 @@
 #include <iostream>
 #include <bits/stdc++.h>
 using namespace std;
-vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &ni)
-{
-    int n = intervals.size();
 
-    vector<vector<int>> ans;
-
-    for (int i = 0; i < n; i++)
-    {
-        // if curr and new are non-overlapping
-        if (intervals[i][1] < ni[0])
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+        int n=intervals.size();
+        vector<vector<int>> ans;
+        int i=0;
+        // non-overlapping part(left)
+        while(i<n && intervals[i][1]<newInterval[0])
         {
             ans.push_back(intervals[i]);
+            i++;
         }
-        else if (intervals[i][0] > ni[1])
-        {
-            ans.push_back(ni);
-            for (; i < n; i++)
-            {
-                ans.push_back(intervals[i]);
-            }
-            return ans;
+        // overlapping part
+        while(i<n && newInterval[1]>=intervals[i][0]){
+            newInterval[0]=min(newInterval[0],intervals[i][0]);
+            newInterval[1]=max(newInterval[1],intervals[i][1]);
+            i++;
         }
-        else
-        { // they are overlapping
-            ni[0] = min(ni[0], intervals[i][0]);
-            ni[1] = max(ni[1], intervals[i][1]);
-        }
-    }
-    ans.push_back(ni);
-    return ans;
-}
+        ans.push_back(newInterval);
 
+        // non-overlapping part(right)
+        while(i<n){
+            ans.push_back(intervals[i]);
+            i++;
+        }
+
+        return ans;
+    }
 int main()
 {
     vector<vector<int>> intervals;

@@ -84,25 +84,19 @@ void print(Node *head)
 
 // Function to reverse a doubly linked list
 // In-place link exchange method
-Node *reverseDLL(Node *head)
-{
-    if (head == NULL || head->next == NULL)
-        return head;
-    Node *curr=head;
-    Node *last=NULL;
-    Node *front=NULL;
-
-    while(curr!=NULL)
+Node* reverseDLL(Node * head)
     {
-        last=curr->back;
-        front=curr->next;
-        curr->next=last;
-        curr->back=front;
-        last=curr;
-        curr=front;
+        Node *p=NULL,*r=NULL;
+        Node *q=head;
+        while(q){
+            r=q->next;
+            q->next=p;
+            q->back=r;
+            p=q;
+            q=r;
+        }
+        return p;
     }
-    return last;
-}
 
 int main()
 {
@@ -121,4 +115,4 @@ int main()
     return 0;
 }
 
-// https://www.codingninjas.com/studio/problems/reverse-a-doubly-linked-list_1116098?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=SUBMISSION
+// https://www.geeksforgeeks.org/problems/reverse-a-doubly-linked-list/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=reverse-a-doubly-linked-list
